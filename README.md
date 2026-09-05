@@ -16,7 +16,7 @@ Clicking % will jump to the matching `endmodule` keyword.
 
 ```lua
 {
-  'evanwporter/sv-matchit',
+  'evanwporter/sv-matchit.nvim',
   ft = "systemverilog",
   build = "nix develop --command cargo build --release",
   opts = {},

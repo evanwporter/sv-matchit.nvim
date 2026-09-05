@@ -1,22 +1,16 @@
 # SV Matchit
 
-Native `%` matching for SystemVerilog block keywords in Neovim.
+`%` matching for SystemVerilog block keywords in Neovim.
 
-| Opening | Closing |
-| --- | --- |
-| `begin` | `end` |
-| `module` | `endmodule` |
-| `function` / `task` | `endfunction` / `endtask` |
-| `class`, `package`, `interface`, `program`, `checker`, `primitive` | their `end…` keyword |
-| `generate`, `clocking`, `property`, `sequence`, `specify`, `covergroup`, `config` | their `end…` keyword |
-| `case`, `casex`, `casez`, `randcase` | `endcase` |
-| `fork` | `join`, `join_any`, `join_none` |
+For example with the cursor on module:
 
-Keywords in comments, strings, escaped identifiers, and longer identifiers are
-ignored. On an edit, only the changed line range is retokenized; a full reparse
-is used only when a block-comment boundary changes. `%` jumps to the matching
-keyword when the cursor is on one, and otherwise retains Neovim's normal `%`
-behavior.
+```systemverilog
+module foo;
+    logic a;
+endmodule
+```
+
+Clicking % will jump to the matching `endmodule` keyword.
 
 ## Install
 
@@ -31,8 +25,11 @@ not download, build, or search Neovim's runtime path for it.
 
 ```lua
 {
-  dir = '~/sv-matchit',
-  name = 'systemverilog-keyword-pairs',
+  dir = 'evanwporter/sv-matchit',
   config = function() require('sv-matchit').setup() end,
 }
 ```
+
+## Credits
+
+This plugin is a fork of [blink.pairs](https://github.com/saghen/blink.pairs).

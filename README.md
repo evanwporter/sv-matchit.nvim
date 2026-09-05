@@ -14,19 +14,12 @@ Clicking % will jump to the matching `endmodule` keyword.
 
 ## Install
 
-Build the native library in the repository before starting Neovim:
-
-```sh
-cargo build --release
-```
-
-The plugin loads the resulting library directly from `target/release`; it does
-not download, build, or search Neovim's runtime path for it.
-
 ```lua
 {
-  dir = 'evanwporter/sv-matchit',
-  config = function() require('sv-matchit').setup() end,
+  'evanwporter/sv-matchit',
+  ft = "systemverilog",
+  build = "nix develop --command cargo build --release",
+  opts = {},
 }
 ```
 

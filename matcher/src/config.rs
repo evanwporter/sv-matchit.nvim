@@ -65,9 +65,9 @@ impl Parse for MatcherDef {
             match section_name.to_string().as_str() {
                 "delimiters" => {
                     while !section_content.is_empty() {
-                        let open = get_single_char(section_content.parse::<LitStr>()?)?;
+                        let open = section_content.parse::<LitStr>()?.value();
                         section_content.parse::<FatArrow>()?;
-                        let close = get_single_char(section_content.parse::<LitStr>()?)?;
+                        let close = section_content.parse::<LitStr>()?.value();
                         delimiters.push((open, close));
 
                         if !section_content.is_empty() {

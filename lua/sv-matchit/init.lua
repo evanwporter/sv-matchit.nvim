@@ -34,6 +34,11 @@ function pairs.setup(user_config)
 
   if config.mappings.enabled then require('blink.pairs.mappings').enable() end
   if config.highlights.enabled then require('blink.pairs.highlight').register(config.highlights) end
+
+  -- Set up % mapping for jumping to matching delimiters
+  vim.keymap.set({ 'n', 'x', 'o' }, '%', function()
+    pairs.jump_to_match()
+  end, { noremap = true, silent = true, desc = 'Jump to matching delimiter' })
 end
 
 function pairs.library_available() return native:library_available() end
@@ -76,6 +81,29 @@ function pairs.get_match_at(bufnr, row, col)
   if not ok or not blink_pairs.get_match_at then return nil end
 
   return blink_pairs.get_match_at(bufnr, row, col)
+end
+
+-- Jump to matching delimiter with %
+function pairs.jump_to_match()
+  local rust = require('sv-matchit.rust')
+  local bufnr = vim.api.nvim_get_current_buf()
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local row, col = cursor[1] - 1, cursor[2]
+
+  local match_pair = rust.get_match_pair(bufnr, row, col)
+  if not match_pair or #match_pair < 2 then return end
+
+  -- Determine which match we're on and jump to the other
+  local current_match = match_pair[1]
+  local target_match = match_pair[2]
+
+  -- If cursor is closer to second match, swap them
+  if current_match.line > row or (current_match.line == row and current_match.col > col) then
+    current_match, target_match = target_match, current_match
+  end
+
+  -- Jump to target (convert from 0-indexed to 1-indexed)
+  vim.api.nvim_win_set_cursor(0, { target_match.line + 1, target_match.col })
 end
 
 return pairs
